@@ -16,7 +16,7 @@
 ## Requisitos previos
 
 - **Java 21** (JDK).
-- **Maven 3.9+** instalado (el servicio no incluye Maven Wrapper; en Docker la imagen `maven:3.9` lo provee).
+- Maven Wrapper incluido (`mvnw` / `mvnw.cmd`).
 - **User-Service** (puerto 8084) e **Inventory-Service** (puerto 8081) accesibles en la red.
 
 ## Configuración
@@ -34,13 +34,15 @@ La configuración está en [src/main/resources/application.properties](src/main/
 ## Instalación
 
 ```bash
-mvn clean package -DskipTests
+./mvnw clean package -DskipTests      # Linux/Mac
+.\mvnw.cmd clean package -DskipTests  # Windows (PowerShell)
 ```
 
 ## Ejecución
 
 ```bash
-mvn spring-boot:run
+./mvnw spring-boot:run        # Linux/Mac
+.\mvnw.cmd spring-boot:run    # Windows (PowerShell)
 ```
 
 El servicio queda disponible en **http://localhost:8086**.
@@ -99,15 +101,17 @@ curl -X GET http://localhost:8086/bff/dashboard \
 
 ## Pruebas
 
+No hay Maven global; usa el wrapper. En Windows, `mvnw` necesita `JAVA_HOME`:
+
 ```powershell
 # PowerShell (Windows)
 $env:JAVA_HOME = Split-Path -Parent (Split-Path -Parent (Get-Command java).Source)
-mvn test
+.\mvnw.cmd test
 ```
 
 ```bash
 # Linux/Mac
-mvn test
+./mvnw test
 ```
 
 Las 5 pruebas (JUnit 5 + Mockito + AssertJ) cubren el controlador (`BffControllerTest`) con MockMvc, el servicio (`BffServiceTest`) con mocks de `RestClient`, y la carga del contexto (`BffApplicationTests`).
